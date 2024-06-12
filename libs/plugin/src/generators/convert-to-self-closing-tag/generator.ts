@@ -7,13 +7,13 @@ import {
 } from '@angular-eslint/bundled-angular-compiler';
 import { Element as Element_2 } from '@angular/compiler';
 import {
+	Tree,
 	formatFiles,
 	getProjects,
 	joinPathFragments,
 	logger,
 	readJson,
 	readProjectConfiguration,
-	Tree,
 	visitNotIgnoredFiles,
 } from '@nx/devkit';
 import { readFileSync } from 'node:fs';
@@ -186,6 +186,7 @@ export function migrateComponentToSelfClosingTags(template: string): string {
 			start + changedOffset,
 			end + changedOffset,
 		);
+
 		function convertToSelfClosingTag(
 			tagName: string,
 			templatePart: string,
@@ -247,11 +248,13 @@ class ElementCollector extends RecursiveVisitor {
 
 				if (child instanceof Text) {
 					if (child.value.trim() === '' || child.value.trim() === '\n') {
-						this.elements.push({
-							tagName: element.name,
-							start: element.sourceSpan.start.offset,
-							end: element.sourceSpan.end.offset,
-						});
+						if (element.name.includes('-')) {
+							this.elements.push({
+								tagName: element.name,
+								start: element.sourceSpan.start.offset,
+								end: element.sourceSpan.end.offset,
+							});
+						}
 					}
 				}
 			}
@@ -259,12 +262,13 @@ class ElementCollector extends RecursiveVisitor {
 			return super.visitElement(element, context);
 		}
 
-		this.elements.push({
-			tagName: element.name,
-			start: element.sourceSpan.start.offset,
-			end: element.sourceSpan.end.offset,
-		});
-
+		if (element.name.includes('-')) {
+			this.elements.push({
+				tagName: element.name,
+				start: element.sourceSpan.start.offset,
+				end: element.sourceSpan.end.offset,
+			});
+		}
 		return super.visitElement(element, context);
 	}
 }
