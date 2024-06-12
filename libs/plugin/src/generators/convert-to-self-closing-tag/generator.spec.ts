@@ -68,6 +68,17 @@ const template = `
       </hello-world15>
   </hello-world13>
 </hello-world12>
+
+<app-management
+  *ngIf="
+    categoryList &&
+    ((test1 && test1.length > 0) ||
+    (test && test.length > 0))
+  "
+  [test]="test > 2"
+  [test]="test"
+  (testEvent)="test.length > 0 ? test($event) : null"
+  (testEvent2)="test1($event)"></app-management>
 `;
 
 const filesMap = {

@@ -188,8 +188,12 @@ export function migrateComponentToSelfClosingTags(template: string): string {
 		);
 
 		function replaceWithSelfClosingTag(html, tagName) {
+			// const pattern = new RegExp(
+			// 	`<\\s*${tagName}\\s*([^>]*)\\s*>[\\s\\S]*?<\\s*\\/\\s*${tagName}\\s*>`,
+			// 	'gi',
+			// );
 			const pattern = new RegExp(
-				`<\\s*${tagName}\\s*([^>]*)\\s*>[\\s\\S]*?<\\s*\\/\\s*${tagName}\\s*>`,
+				`<\\s*${tagName}\\s*([^>]*?(?:"[^"]*"|'[^']*'|[^'">])*)\\s*>([\\s\\S]*?)<\\s*/\\s*${tagName}\\s*>`,
 				'gi',
 			);
 			const replacement = `<${tagName} $1 />`;
