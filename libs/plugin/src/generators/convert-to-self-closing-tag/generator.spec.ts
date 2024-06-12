@@ -104,6 +104,18 @@ import { Component, Input } from '@angular/core';
 export class MyCmp {
 }
 `,
+
+	componentWithInlineTemplate: `
+import { Component, Input } from '@angular/core';
+
+@Component({
+  template: \`
+    <router-outlet></router-outlet>
+  \`
+})
+export class MyCmp {
+}
+`,
 } as const;
 
 describe('convertToSelfClosingTagGenerator', () => {
@@ -150,6 +162,14 @@ describe('convertToSelfClosingTagGenerator', () => {
 
 	it('should convert properly for templateUrl', async () => {
 		const readContent = setup('componentWithTemplateUrl');
+		await convertToSelfClosingTagGenerator(tree, options);
+		const [updated, , updatedHtml] = readContent();
+		expect(updated).toMatchSnapshot();
+		expect(updatedHtml).toMatchSnapshot();
+	});
+
+	it('should convert properly for inline template', async () => {
+		const readContent = setup('componentWithInlineTemplate');
 		await convertToSelfClosingTagGenerator(tree, options);
 		const [updated, , updatedHtml] = readContent();
 		expect(updated).toMatchSnapshot();

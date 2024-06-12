@@ -120,7 +120,7 @@ export async function convertToSelfClosingTagGenerator(
 							originalText = migrateComponentToSelfClosingTags(originalText);
 
 							if (originalText !== property.getFullText()) {
-								property.replaceWithText(originalText);
+								property.replaceWithText(originalText.trimStart());
 							}
 						} else if (decoratorPropertyName === 'templateUrl') {
 							const dir = dirname(sourcePath);
@@ -188,10 +188,6 @@ export function migrateComponentToSelfClosingTags(template: string): string {
 		);
 
 		function replaceWithSelfClosingTag(html, tagName) {
-			// const pattern = new RegExp(
-			// 	`<\\s*${tagName}\\s*([^>]*)\\s*>[\\s\\S]*?<\\s*\\/\\s*${tagName}\\s*>`,
-			// 	'gi',
-			// );
 			const pattern = new RegExp(
 				`<\\s*${tagName}\\s*([^>]*?(?:"[^"]*"|'[^']*'|[^'">])*)\\s*>([\\s\\S]*?)<\\s*/\\s*${tagName}\\s*>`,
 				'gi',

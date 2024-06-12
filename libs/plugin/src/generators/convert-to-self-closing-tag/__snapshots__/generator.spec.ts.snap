@@ -1,5 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`convertToSelfClosingTagGenerator should convert properly for inline template 1`] = `
+"
+import { Component, Input } from '@angular/core';
+
+@Component({
+  template: \`
+    <router-outlet  />
+  \`
+})
+export class MyCmp {
+}
+"
+`;
+
+exports[`convertToSelfClosingTagGenerator should convert properly for inline template 2`] = `undefined`;
+
 exports[`convertToSelfClosingTagGenerator should convert properly for templateUrl 1`] = `
 "
 import { Component, Input } from '@angular/core';
