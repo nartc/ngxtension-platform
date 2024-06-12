@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`convertToSelfClosingTagGenerator should convert properly for templateUrl 1`] = `
+"
+import { Component, Input } from '@angular/core';
+
+@Component({
+  templateUrl: './my-file.html'
+})
+export class MyCmp {
+}
+"
+`;
+
+exports[`convertToSelfClosingTagGenerator should convert properly for templateUrl 2`] = `
+"
+<div>Hello</div>
+<app-my-cmp1>123</app-my-cmp1>
+<app-my-cmp1>123</app-my-cmp1>
+<app-my-cmp2 test="hello">123</app-my-cmp2>
+<app-my-cmp3
+  test="hello">
+  123
+</app-my-cmp3>
+<app-my-cmp4
+  test="hello"
+>
+  123
+</app-my-cmp4>
+<app-my-cmp5
+  test="hello"
+>
+  123
+</app-my-cmp5>
+<app-my-cmp10 test="hello" />
+
+<app-my-cmp11 test="hello" />
+<app-my-cmp12 test="hello" />
+<input type="text" />
+
+<app-my-cmp6 />
+<app-my-cmp7 test="hello" />
+
+<hello-world />
+
+<pagination count="1" />
+
+<pagination count="1" />
+
+<hello-world />
+
+<hello-world12>
+  <hello-world13>
+    <hello-world14 />
+      <hello-world15>
+        <hello-world16 />
+        <hello-world17 />
+        <hello-world18 />
+      </hello-world15>
+  </hello-world13>
+</hello-world12>
+"
+`;
