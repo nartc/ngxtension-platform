@@ -192,7 +192,7 @@ export function migrateComponentToSelfClosingTags(template: string): string {
 				`<\\s*${tagName}\\s*([^>]*)\\s*>[\\s\\S]*?<\\s*\\/\\s*${tagName}\\s*>`,
 				'gi',
 			);
-			const replacement = `<${tagName} $1/>`;
+			const replacement = `<${tagName} $1 />`;
 			return html.replace(pattern, replacement);
 		}
 
