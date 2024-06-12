@@ -190,7 +190,7 @@ export function migrateComponentToSelfClosingTags(template: string): string {
 		function convertToSelfClosingTag(
 			tagName: string,
 			templatePart: string,
-		): string {
+		): string | null {
 			const regex = new RegExp(
 				`<(${tagName})\\s*((?:\\s*(\\w+)\\s*(=\\s*(?:(['"])(.*?)\\4|([^>\\s]+)))?)*)\\s*>\\s*<\/\\1>\\s*`,
 				'g', // Global flag for multiple replacements
@@ -198,7 +198,7 @@ export function migrateComponentToSelfClosingTags(template: string): string {
 
 			const matches = templatePart.match(regex);
 			if (!matches) {
-				return templatePart;
+				return null;
 			}
 
 			return templatePart.replace(regex, (match, tag, attributes) => {
@@ -220,15 +220,19 @@ export function migrateComponentToSelfClosingTags(template: string): string {
 			});
 		}
 
-		template = replaceTemplate(
-			template,
-			convertToSelfClosingTag(tagName, templatePart),
-			start,
-			end,
-			changedOffset,
-		);
+		const convertedTemplate = convertToSelfClosingTag(tagName, templatePart);
 
-		changedOffset += template.length - currentLength;
+		if (convertedTemplate) {
+			template = replaceTemplate(
+				template,
+				convertedTemplate,
+				start,
+				end,
+				changedOffset,
+			);
+
+			changedOffset += template.length - currentLength;
+		}
 	});
 
 	return template;
