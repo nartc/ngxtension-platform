@@ -187,42 +187,19 @@ export function migrateComponentToSelfClosingTags(template: string): string {
 			end + changedOffset,
 		);
 
-		function convertToSelfClosingTag(
-			tagName: string,
-			templatePart: string,
-		): string | null {
-			const regex = new RegExp(
-				`<(${tagName})\\s*((?:\\s*(\\w+)\\s*(=\\s*(?:(['"])(.*?)\\4|([^>\\s]+)))?)*)\\s*>\\s*<\/\\1>\\s*`,
-				'g', // Global flag for multiple replacements
+		function replaceWithSelfClosingTag(html, tagName) {
+			const pattern = new RegExp(
+				`<\\s*${tagName}\\s*([^>]*)\\s*>[\\s\\S]*?<\\s*\\/\\s*${tagName}\\s*>`,
+				'gi',
 			);
-
-			const matches = templatePart.match(regex);
-			if (!matches) {
-				return null;
-			}
-
-			return templatePart.replace(regex, (match, tag, attributes) => {
-				// Handle attributes (if any)
-				let attributeString = '';
-				if (attributes.trim()) {
-					attributeString = attributes
-						.trim()
-						.replace(/\s+/g, ' ') // Normalize spaces around attributes
-						.replace(/=\s*"/g, '="') // Remove spaces around = and inside quotes
-						.replace(/"\s*>/g, '">'); // Remove spaces before >
-				}
-
-				if (attributeString.trim().length === 0) {
-					return `<${tag} />`;
-				}
-
-				return `<${tag} ${attributeString.trim()} />`;
-			});
+			const replacement = `<${tagName} $1/>`;
+			return html.replace(pattern, replacement);
 		}
 
-		const convertedTemplate = convertToSelfClosingTag(tagName, templatePart);
+		const convertedTemplate = replaceWithSelfClosingTag(templatePart, tagName);
 
-		if (convertedTemplate) {
+		// if the template has changed, replace the original template with the new one
+		if (convertedTemplate.length !== templatePart.length) {
 			template = replaceTemplate(
 				template,
 				convertedTemplate,

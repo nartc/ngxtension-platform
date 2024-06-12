@@ -24,11 +24,15 @@ const template = `
   123
 </app-my-cmp5>
 <app-my-cmp10 test="hello"
+  [test]="hello"
+  (test)="hello()"
 >
 </app-my-cmp10>
 
 <app-my-cmp11
   test="hello"
+  [test]="hello"
+  (test)="hello()"
 >
 </app-my-cmp11>
 <app-my-cmp12 test="hello"
@@ -43,7 +47,7 @@ const template = `
 
 <hello-world></hello-world>
 
-<pagination count="1"></pagination>
+<pagination count="1" [test]="hello" (test)="test"></pagination>
 
 <pagination count="1" />
 
@@ -51,11 +55,13 @@ const template = `
 
 <hello-world12>
   <hello-world13>
-    <hello-world14></hello-world14>
+    <hello-world14 count="1" [test]="hello" (test)="test" ></hello-world14>
       <hello-world15>
-        <hello-world16 />
-        <hello-world17></hello-world17>
+        <hello-world16  count="1" [test]="hello" (test)="test"  />
+        <hello-world17  count="1" [test]="hello" (test)="test" ></hello-world17>
         <hello-world18
+         count="1" [test]="hello"
+          (test)="test"
           >
 
         </hello-world18>

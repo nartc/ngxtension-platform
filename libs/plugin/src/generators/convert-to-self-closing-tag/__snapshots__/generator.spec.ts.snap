@@ -32,10 +32,17 @@ exports[`convertToSelfClosingTagGenerator should convert properly for templateUr
 >
   123
 </app-my-cmp5>
-<app-my-cmp10 test="hello" />
+<app-my-cmp10 test="hello"
+  [test]="hello"
+  (test)="hello()"
+/>
 
-<app-my-cmp11 test="hello" />
-<app-my-cmp12 test="hello" />
+<app-my-cmp11 test="hello"
+  [test]="hello"
+  (test)="hello()"
+/>
+<app-my-cmp12 test="hello"
+/>
 <input type="text" />
 
 <app-my-cmp6 />
@@ -43,7 +50,7 @@ exports[`convertToSelfClosingTagGenerator should convert properly for templateUr
 
 <hello-world />
 
-<pagination count="1" />
+<pagination count="1" [test]="hello" (test)="test"></pagination>
 
 <pagination count="1" />
 
@@ -51,11 +58,13 @@ exports[`convertToSelfClosingTagGenerator should convert properly for templateUr
 
 <hello-world12>
   <hello-world13>
-    <hello-world14 />
+    <hello-world14 count="1" [test]="hello" (test)="test" />
       <hello-world15>
-        <hello-world16 />
-        <hello-world17 />
-        <hello-world18 />
+        <hello-world16  count="1" [test]="hello" (test)="test"  />
+        <hello-world17 count="1" [test]="hello" (test)="test" />
+        <hello-world18 count="1" [test]="hello"
+          (test)="test"
+          />
       </hello-world15>
   </hello-world13>
 </hello-world12>
