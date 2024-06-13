@@ -45,7 +45,15 @@ export async function convertToSFCGenerator(
 		return exit(1);
 	}
 
-	const { path, project, moveStyles, maxInlineTemplateLines } = options;
+	let {
+		path,
+		project,
+		moveStyles,
+		maxInlineTemplateLines,
+		maxInlineStyleLines,
+	} = options;
+	maxInlineStyleLines = maxInlineStyleLines || 200;
+	maxInlineTemplateLines = maxInlineTemplateLines || 200;
 
 	if (path && project) {
 		logger.error(
@@ -132,10 +140,6 @@ export async function convertToSFCGenerator(
 
 									// remove the templateUrl file
 									tree.delete(templatePath);
-
-									if (moveStyles) {
-										console.log('TODO: move styles');
-									}
 								} catch (err) {
 									logger.error(
 										`[ngxtension] Skipping ${sourcePath} due to error: ${err}`,
@@ -144,12 +148,56 @@ export async function convertToSFCGenerator(
 							}
 						}
 
-						if (moveStyles) {
-							if (
-								decoratorPropertyName === 'styleUrls' ||
-								decoratorPropertyName === 'styleUrl'
-							) {
-								// TODO: move styles
+						if (
+							decoratorPropertyName === 'styleUrl' ||
+							decoratorPropertyName === 'styleUrls'
+						) {
+							if (moveStyles) {
+								let styleUrl =
+									decoratorPropertyName === 'styleUrl'
+										? property
+												.getInitializer()
+												.getText()
+												.slice(
+													1,
+													property.getInitializer().getText().length - 1,
+												)
+										: '';
+
+								if (decoratorPropertyName === 'styleUrls') {
+									styleUrl = property
+										.getInitializer()
+										.getChildren()[1]
+										.getText();
+								}
+
+								const dir = dirname(sourcePath);
+								const stylePath = joinPathFragments(
+									dir,
+									removeQuotes(styleUrl),
+								);
+
+								let styleText = tree.exists(stylePath)
+									? tree.read(stylePath, 'utf8')
+									: '';
+
+								let styleTextLines = styleText.split('\n').length;
+
+								if (styleTextLines <= maxInlineStyleLines) {
+									try {
+										// replace the styleUrl with the style
+										property.replaceWithText(`styles: \`\n${styleText}\n\``);
+
+										contentsStore.track(stylePath, styleText);
+
+										// remove the styleUrl file
+										tree.delete(stylePath);
+									} catch (err) {
+										logger.error(
+											`[ngxtension] Skipping ${sourcePath} due to error: ${err}`,
+										);
+									}
+								}
 							}
 						}
 					});
@@ -166,6 +214,10 @@ export async function convertToSFCGenerator(
 [ngxtension] Conversion completed. Please check the content and run your formatter as needed.
 `,
 	);
+}
+
+function removeQuotes(str: string) {
+	return str.replace(/['"]/g, '');
 }
 
 export default convertToSFCGenerator;

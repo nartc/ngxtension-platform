@@ -18,6 +18,11 @@
 			"description": "If the template has more lines than this, it will be skipped.",
 			"default": 200
 		},
+		"maxInlineStyleLines": {
+			"type": "number",
+			"description": "If the styles have more lines than this, they will be skipped.",
+			"default": 200
+		},
 		"moveStyles": {
 			"type": "boolean",
 			"description": "Move styles to the single file component.",

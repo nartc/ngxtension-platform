@@ -3,4 +3,5 @@ export interface ConvertToSFCGeneratorSchema {
 	path?: string;
 	moveStyles?: boolean;
 	maxInlineTemplateLines?: number;
+	maxInlineStyleLines?: number;
 }
