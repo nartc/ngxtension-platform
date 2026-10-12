@@ -55,6 +55,8 @@ export class MovieCard {
 }
 ```
 
+Read more about what unsubscribing cancels and what it doesn't: [Does Angular HttpClient unsubscribe cancel requests?](https://frontendatlas.com/angular/trivia/angular-http-what-actually-cancels-request)
+
 ### Works with regular values
 
 This doesn't bring any benefit over using a regular `computed` signal, but it's possible to return regular values (that are not Promises or Observables) from the callback function.
