@@ -19,7 +19,7 @@ import { derivedAsync } from 'ngxtension/derived-async';
 
 ### Works with Promises (fetch)
 
-Having a `movieId` signal input, we can use `derivedAsync` to fetch the movie based on the `movieId`. As soon as the `movieId` changes, the previous computation will be cancelled (if it's an API call, it's going to be cancelled too), and a new one will be triggered.
+Having a `movieId` signal input, we can use `derivedAsync` to fetch the movie based on the `movieId`. As soon as the `movieId` changes, a new computation will be triggered and the result of the previous one will be ignored.
 
 ```ts movie-card.ts
 export class MovieCard {
@@ -32,6 +32,8 @@ export class MovieCard {
 	);
 }
 ```
+
+> Note: A `Promise` can't be cancelled, so the previous `fetch` request keeps running until it completes and only its result is dropped. If the request itself should be aborted, return an `Observable` instead (ex. `HttpClient` below, or `fromFetch` from `rxjs/fetch`).
 
 ### Works with Observables (ex. HttpClient)
 
